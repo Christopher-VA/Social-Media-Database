@@ -19,14 +19,14 @@ const userSchema = new Schema(
                 }
             }
         },
-        thoughts: {
+        thoughts: [{
             type: Schema.Types.ObjectId,
             ref: 'user',
-        },
-        friends: {
+        }],
+        friends: [{
             type: Schema.Types.ObjectId,
             ref: 'thought',
-        }
+        }]
     },
     {
         toJSON: {

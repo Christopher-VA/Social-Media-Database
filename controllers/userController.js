@@ -19,6 +19,7 @@ module.exports = {
       
             res.json(userData);
         } catch (err) {
+            console.log(err);
             res.status(500).json(err);
         }
     },
@@ -27,6 +28,7 @@ module.exports = {
             const userData = await user.create(req.body);
             res.json(userData);
         } catch (err) {
+            console.log(err);
             res.status(500).json(err);
         }
     },
@@ -98,6 +100,7 @@ module.exports = {
                 res.json(userData);
             }
         } catch (err) {
+            console.log(err);
             res.status(500).json(err);
         }
     }

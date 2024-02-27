@@ -1,71 +1,70 @@
-const { Thought, User, Reaction } = require('../models');
-const {Types} = require('mongoose');
-
+const { thought } = require('../models');
 
 module.exports = {
   async getAllThoughts(req, res) {
     try {
-      const thoughts = await Thought.find({});
+      const thoughts = await thought.find({});
       res.json(thoughts);
     } catch (err) {
+      console.log(err);
       res.status(500).json(err);
     }
   },
 
-  async getThoughtsById(req, res) {
+  async getSingleThought(req, res) {
     try {
-      const thought = await Thought.findOne({_id:req.params.thoughtId});
-      if (!thought) {
+      const thoughtData = await thought.findOne({_id:req.params.thoughtId});
+      if (!thoughtData) {
         res.status(404).json({ message: 'Thought not found' });
       } else {
-        res.json(thought);
+        res.json(thoughtData);
       }
     } catch (err) {
       res.status(500).json(err);
     }
   },
 
-  async createThought(req, res) {
+  async postThought(req, res) {
     try {
-      const thought = await Thought.create(req.body);
-      res.status(201).json(thought);
+      const thoughtData = await thought.create(req.body);
+      res.status(201).json(thoughtData);
     } catch (err) {
       res.status(500).json(err);
     }
   },
   
-  async deleteThought(req,res) {
+  async putThoughtById(req, res) {
     try {
-        const thought = await Thought.findByIdAndDelete({_id:req.params.thoughtId});
-        res.status(200).json(thought);
-    } catch (err) {
-        res.status(500).json(err);
-    }
-  },
-
-  async updateThoughtById(req, res) {
-    try {
-      const thought = await Thought.findByIdAndUpdate(req.params.thoughtId, req.body, {
+      const thoughtData = await thought.findByIdAndUpdate(req.params.thoughtId, req.body, {
         new: true,
       });
-      if (!thought) {
+      if (!thoughtData) {
         res.status(404).json({ message: 'Thought not found' });
       } else {
-        res.json(thought);
+        res.json(thoughtData);
       }
     } catch (err) {
       res.status(500).json(err);
     }
   },
 
-  async createReaction(req, res) {
+  async deleteThought(req,res) {
+    try {
+        const thoughtData = await thought.findByIdAndDelete({_id:req.params.thoughtId});
+        res.status(200).json(thoughtData);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+  },
+
+  async postReaction(req, res) {
       try {
-        const thought = await Thought.findOneAndUpdate(
+        const thoughtData = await thought.findOneAndUpdate(
             {_id:req.params.thoughtId},
             {$addToSet: {reactions: req.body}},
             {runValidators: true, new: true}
         );
-        thought ? res.json(thought) : res.status(404).json({message: notFound});
+        thoughtData ? res.json(thoughtData) : res.status(404).json({message: notFound});
     } catch (e) {
         res.status(500).json(e);
     }
@@ -73,13 +72,13 @@ module.exports = {
 
   async deleteReaction(req, res) {
       try {
-        const thought = await Thought.findOneAndUpdate(
+        const thoughtData = await thought.findOneAndUpdate(
             {_id: req.params.thoughtId},
             {$pull: {reactions: {reactionId: req.params.reactionId}}},
             {runValidators: true, new: true}
         );
 
-        thought ? res.json(thought) : res.status(404).json({message: notFound});
+        thoughtData ? res.json(thoughtData) : res.status(404).json({message: notFound});
     } catch (e) {
         res.status(500).json(e);
     }
